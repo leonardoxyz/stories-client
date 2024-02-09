@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    margin: 0;
+    padding: 1rem;
+}
+
+.app-context {
+    display: flex;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.app-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+}
+
+.story-container {
+    display: grid;
+    grid-template-columns: 4fr 4fr 4fr 4fr;
+    gap: 4rem;
+    
+}
