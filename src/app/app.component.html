@@ -1,28 +1,59 @@
-<div class="app-container">
-  <div class="app-title">
-    <h1>Selecione um Usuário</h1>
-  </div>
-  <div class="app-context">
-    <p-dropdown [options]="users" [(ngModel)]="selectedUser" placeholder="Selecione um Usuário"
-      optionLabel="name"></p-dropdown>
-    <p-dropdown [options]="options" [(ngModel)]="selectedOption" placeholder="Organizar por"
-      optionLabel="name" (onChange)="onChangeOption()"></p-dropdown>
-  </div>
-  <div class="story-container">
-    <div *ngFor="let story of stories" class="card flex justify-content-center">
-      <p-card [header]="story.title" [style]="{ width: '300px' }">
-        <ng-template pTemplate="header"></ng-template>
-        <p>{{ story.description }}</p>
-        <p>Likes - {{ story.likes }}</p>
-        <p>Dislike - {{ story.dislikes }}</p>
-        <p>Departamento - {{ getDepartmentName(story.departmentId) }}</p>
-        <ng-template pTemplate="footer">
-          <div class="app-cta">
-            <button pButton pRipple label="Like" class="p-button-success" (click)="vote(story.id, true)"></button>
-            <button pButton label="Dislike" class="p-button-danger" (click)="vote(story.id, false)"></button>
-          </div>
-        </ng-template>
-      </p-card>
+<div class="app-all">
+  <div class="app-container">
+    <div class="app-title">
+      <h1>Vote nas Estórias.</h1>
+      <span>Lembre-se de selecionar um usuário!</span>
+    </div>
+    <div class="app-context">
+      <p-dropdown [options]="users" [(ngModel)]="selectedUser" placeholder="Selecione um Usuário"
+        optionLabel="name"></p-dropdown>
+      <p-dropdown [options]="options" [(ngModel)]="selectedOption" placeholder="Organizar por" optionLabel="name"
+        (onChange)="onChangeOption()"></p-dropdown>
+    </div>
+    <div class="story-container">
+      <div *ngFor="let story of stories" class="card flex justify-content-center">
+        <p-card [header]="story.title" [style]="{ width: '300px' }">
+          <ng-template pTemplate="header"></ng-template>
+          <p>{{ story.description }}</p>
+          <p>Likes - {{ story.likes }}</p>
+          <p>Dislike - {{ story.dislikes }}</p>
+          <p>Departamento - {{ getDepartmentName(story.departmentId) }}</p>
+          <ng-template pTemplate="footer">
+            <div class="app-cta">
+              <button pButton pRipple label="Like" class="p-button-success" (click)="vote(story.id ?? '', true)"></button>
+              <button pButton label="Dislike" class="p-button-danger" (click)="vote(story.id ?? '', false)"></button>
+            </div>
+          </ng-template>
+        </p-card>
+      </div>
     </div>
   </div>
+  <div class="w-full md:w-2">
+    <p-divider layout="vertical" styleClass="hidden md:flex"></p-divider>
+  </div>
+
+  <div class="register-container">
+    <form class="form" (ngSubmit)="postStory()">
+      <div class="register-title">
+        <h1>Registre uma História</h1>
+        <span>Lembre-se de preencher todos os campos!</span>
+      </div>
+      <div class="register-context">
+        <label>
+          Título:
+          <input required placeholder="Título" class="input" name="title" [(ngModel)]="title">
+        </label>
+        <label>
+          Descrição:
+          <textarea required placeholder="Descrição" class="input" name="description" [(ngModel)]="description"></textarea>
+        </label>
+        <label>
+          Departamento:
+          <p-dropdown [options]="departments" [(ngModel)]="departmentId" placeholder="Selecione um Departamento" optionLabel="name" name="departmentId"></p-dropdown>
+        </label>
+      </div>
+      <button type="submit" class="submit" (click)="postStory">Submit</button>
+    </form>
+  </div>
+  <div *ngIf="error" class="error-message">{{ error }}</div>
 </div>

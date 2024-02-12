@@ -1,23 +1,27 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { env } from '../env/env';
 import { Story } from '../Model/Story';
 import { Vote } from '../Model/Vote';
+import { env } from '../env/env';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class StoryService {
-    apiUrl = `${env.apiUrl}/Stories`;
+  apiUrl = `${env.apiUrl}/Stories`;
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-    get(): Observable<Story[]> {
-        return this.http.get<Story[]>(this.apiUrl);
-    }
+  get(): Observable<Story[]> {
+    return this.http.get<Story[]>(this.apiUrl);
+  }
 
-    addVote(vote: Vote): Observable<boolean> {
-        return this.http.post<boolean>(`${this.apiUrl}/AddVote`, vote);
-    }
+  post(story: Story): Observable<Story> {
+    return this.http.post<Story>(this.apiUrl, story);
+  }
+
+  addVote(vote: Vote): Observable<boolean> {
+    return this.http.post<boolean>(`${this.apiUrl}/AddVote`, vote);
+  }
 }

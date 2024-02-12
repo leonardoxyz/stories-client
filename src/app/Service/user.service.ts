@@ -8,8 +8,8 @@ import { env } from '../env/env';
   providedIn: 'root'
 })
 export class UserService {
-
   apiUrl = `${env.apiUrl}/Users`;
+
   constructor(private http: HttpClient) { }
 
   getAllUsers(): Observable<User[]> {

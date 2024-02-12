@@ -12,6 +12,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { User } from './Model/User';
 import { HttpClientModule } from '@angular/common/http';
 import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { CardModule } from 'primeng/card';
     FormsModule,
     HttpClientModule,
     CardModule,
+    DividerModule
     
   ],
   providers: [],

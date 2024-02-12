@@ -1,8 +1,9 @@
 export class Story {
-    id!: string
+    id?: string
     title!: string
     description!: string
     likes!: number
     dislikes!: number
     departmentId!: string
 }
+

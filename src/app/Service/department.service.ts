@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { env } from '../env/env';
 import { Department } from '../Model/Department';
+import { env } from '../env/env';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class DepartmentService {
-    apiUrl = `${env.apiUrl}/Departments`;
+  apiUrl = `${env.apiUrl}/Departments`;
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-    get(): Observable<Department[]> {
-        return this.http.get<Department[]>(this.apiUrl);
-    }
+  get(): Observable<Department[]> {
+    return this.http.get<Department[]>(this.apiUrl);
+  }
+
+  post(department: Department): Observable<Department> {
+    return this.http.post<Department>(this.apiUrl, department);
+  }
 }
