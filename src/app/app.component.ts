@@ -22,6 +22,8 @@ export class AppComponent implements OnInit {
   newStory: Story = new Story();
 
   public title: string = '';
+  public likes: number = 0;
+  public dislikes: number = 0;
   public description: string = '';
   public departmentId: string = '';
 
@@ -42,8 +44,8 @@ export class AppComponent implements OnInit {
     );
 
     this.options = [
-      { name: 'Mais votado', sortBy: 'likes' },
-      { name: 'Menos votado', sortBy: 'dislikes' }
+      { name: 'Likes', sortBy: 'likes' },
+      { name: 'Dislikes', sortBy: 'dislikes' }
     ];
 
     this.storyService.get().subscribe(
@@ -93,61 +95,64 @@ export class AppComponent implements OnInit {
   }
   
   postStory() {
-    if (!this.title || !this.description || !this.departmentId) {
+    if (!this.title || !this.description || !this.departmentId || !this.likes || !this.dislikes) {
       console.error('Preencha todos os campos.');
       return;
     }
   
     const newStory: Story = {
+      id: '',
       title: this.title,
       description: this.description,
-      likes: 0,
-      dislikes: 0,
+      likes: this.likes,
+      dislikes: this.dislikes,
       departmentId: this.departmentId
     };
   
-    this.storyService.post(newStory).subscribe({
+    this.storyService.postStory(newStory).subscribe({
       next: (story: Story) => {
         console.log('História registrada com sucesso:', story);
-        this.stories.push(story); // Adiciona a nova história à lista existente sem recarregar todas as histórias novamente
-        this.resetForm(); // Limpa os campos do formulário após a postagem bem-sucedida
+        this.stories.push(story);
+        this.resetForm();
       },
       error: (error) => {
         console.error('Erro ao registrar história:', error);
         this.error = 'Erro ao registrar história. Por favor, tente novamente.';
       }
     });
-  }
+  }  
   
   resetForm() {
+    this.dislikes = 0;
+    this.likes = 0;
     this.title = '';
     this.description = '';
-    this.departmentId = ''; // Limpa apenas o ID do departamento
+    this.departmentId = '';
   }
   
 
-  // deleteStory(storyId: string) {
-  //   this.storyService.delete(storyId).subscribe({
-  //     next: (success) => {
-  //       if (success) {
-  //         console.log('História deletada com sucesso.');
-  //         this.storyService.get().subscribe(
-  //           (stories: Story[]) => {
-  //             this.stories = stories;
-  //           },
-  //           (error) => {
-  //             console.error('Erro ao buscar histórias:', error);
-  //           }
-  //         );
-  //       } else {
-  //         console.error('Erro ao deletar história.');
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.error('Erro ao deletar história:', error);
-  //     }
-  //   });
-  // }
+  deleteStory(storyId: string) {
+    this.storyService.delete(storyId).subscribe({
+      next: (success) => {
+        if (success) {
+          console.log('História deletada com sucesso.');
+          this.storyService.get().subscribe(
+            (stories: Story[]) => {
+              this.stories = stories;
+            },
+            (error) => {
+              console.error('Erro ao buscar histórias:', error);
+            }
+          );
+        } else {
+          console.error('Erro ao deletar história.');
+        }
+      },
+      error: (error) => {
+        console.error('Erro ao deletar história:', error);
+      }
+    });
+  }
 
   vote(storyId: string, isLiked: boolean) {
     if (!this.selectedUser) {
