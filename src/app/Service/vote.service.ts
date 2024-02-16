@@ -12,7 +12,9 @@ export class VoteService {
 
   constructor(private http: HttpClient) { }
 
+  apiUrl = `${env.apiUrl}/Stories/AddVote`;
+
   addVote(vote: Vote): Observable<boolean> {
-    return this.http.post<boolean>(`${env.apiUrl}/Stories/AddVote`, vote);
+    return this.http.post<boolean>(`${this.apiUrl}`, vote);
   }
 }

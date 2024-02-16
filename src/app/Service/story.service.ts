@@ -17,15 +17,8 @@ export class StoryService {
     return this.http.get<Story[]>(this.apiUrl);
   }
 
-  postStory(story: Story): Observable<Story> {
-    return this.http.post<Story>(this.apiUrl, story);
-  }
-
-  addVote(vote: Vote): Observable<boolean> {
-    return this.http.post<boolean>(`${this.apiUrl}/AddVote`, vote);
-  }
-
   delete(id: string): Observable<boolean> {
     return this.http.delete<boolean>(`${this.apiUrl}/${id}`);
   }
 }
+

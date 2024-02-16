@@ -11,8 +11,8 @@ body {
 }
 
 .app-all {
-    display: grid;
-    grid-template-columns: 2fr 0.1fr 2fr;
+    display: flex;
+    justify-content: center;
     align-content: center;
     justify-content: center;
 }
@@ -45,7 +45,7 @@ h1 {
 
 .story-container {
     display: grid;
-    grid-template-columns: 2fr 2fr;
+    grid-template-columns: 2fr 2fr 2fr 2fr;
     gap: 4rem;
     padding: 1rem;
 }

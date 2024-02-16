@@ -6,6 +6,9 @@ import { StoryService } from './Service/story.service';
 import { Department } from './Model/Department';
 import { DepartmentService } from './Service/department.service';
 import { Option } from './Model/Option';
+import { HttpClient } from '@angular/common/http';
+import { FormBuilder } from '@angular/forms';
+import { VoteService } from './Service/vote.service';
 
 @Component({
   selector: 'app-root',
@@ -13,28 +16,23 @@ import { Option } from './Model/Option';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  title = 'Stories.Client';
   users: User[] | undefined;
   options: Option[] | undefined;
   selectedUser: User | undefined;
   selectedOption: Option | undefined;
   departments: Department[] | undefined;
   selectedStory: Story | undefined;
-  newStory: Story = new Story();
-
-  public title: string = '';
-  public likes: number = 0;
-  public dislikes: number = 0;
-  public description: string = '';
-  public departmentId: string = '';
+  newStory: Story | undefined;
 
   public stories: Story[] = [];
   public error: string | null = null;
 
-  constructor(private userService: UserService, private storyService: StoryService, private departmentService: DepartmentService) { } // Adicionar DepartmentService ao construtor
+  constructor(private voteService: VoteService, private formBuilder: FormBuilder, private httpClient: HttpClient, private userService: UserService, private storyService: StoryService, private departmentService: DepartmentService) { }
 
   ngOnInit() {
     this.getDepartments();
-    this.userService.getAllUsers().subscribe(
+    this.userService.get().subscribe(
       (users: User[]) => {
         this.users = users;
       },
@@ -74,10 +72,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onChangeOption() {
-    this.sortStories();
-  }
-
   getDepartmentName(departmentId: string): string {
     const department = this.departments?.find(d => d.id === departmentId);
     return department ? department.name : 'Departamento não encontrado';
@@ -93,43 +87,6 @@ export class AppComponent implements OnInit {
       }
     );
   }
-  
-  postStory() {
-    if (!this.title || !this.description || !this.departmentId || !this.likes || !this.dislikes) {
-      console.error('Preencha todos os campos.');
-      return;
-    }
-  
-    const newStory: Story = {
-      id: '',
-      title: this.title,
-      description: this.description,
-      likes: this.likes,
-      dislikes: this.dislikes,
-      departmentId: this.departmentId
-    };
-  
-    this.storyService.postStory(newStory).subscribe({
-      next: (story: Story) => {
-        console.log('História registrada com sucesso:', story);
-        this.stories.push(story);
-        this.resetForm();
-      },
-      error: (error) => {
-        console.error('Erro ao registrar história:', error);
-        this.error = 'Erro ao registrar história. Por favor, tente novamente.';
-      }
-    });
-  }  
-  
-  resetForm() {
-    this.dislikes = 0;
-    this.likes = 0;
-    this.title = '';
-    this.description = '';
-    this.departmentId = '';
-  }
-  
 
   deleteStory(storyId: string) {
     this.storyService.delete(storyId).subscribe({
@@ -175,7 +132,7 @@ export class AppComponent implements OnInit {
       story: story
     };
 
-    this.storyService.addVote(vote).subscribe({
+    this.voteService.addVote(vote).subscribe({
       next: (success) => {
         if (success) {
           console.log('Voto registrado com sucesso.');
@@ -197,3 +154,5 @@ export class AppComponent implements OnInit {
     });
   }
 }
+
+

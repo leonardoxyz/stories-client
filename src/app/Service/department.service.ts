@@ -15,8 +15,4 @@ export class DepartmentService {
   get(): Observable<Department[]> {
     return this.http.get<Department[]>(this.apiUrl);
   }
-
-  post(department: Department): Observable<Department> {
-    return this.http.post<Department>(this.apiUrl, department);
-  }
 }

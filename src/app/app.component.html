@@ -8,7 +8,7 @@
       <p-dropdown [options]="users" [(ngModel)]="selectedUser" placeholder="Selecione um Usuário"
         optionLabel="name"></p-dropdown>
       <p-dropdown [options]="options" [(ngModel)]="selectedOption" placeholder="Organizar por" optionLabel="name"
-        (onChange)="onChangeOption()"></p-dropdown>
+        (onChange)="sortStories()"></p-dropdown>
     </div>
     <div class="story-container">
       <div *ngFor="let story of stories" class="card flex justify-content-center">
@@ -35,7 +35,6 @@
                     clip-rule="evenodd" fill-rule="evenodd"></path>
                   <path fill="#B5BAC1" d="M2 13H48L47.6742 21.28H2.32031L2 13Z"></path>
                 </svg>
-    
                 <span class="tooltip">Delete</span>
               </button>
             </div>
@@ -43,8 +42,5 @@
         </p-card>
       </div>
     </div>
-  </div>
-  <div class="w-full md:w-2">
-    <p-divider layout="vertical" styleClass="hidden md:flex"></p-divider>
   </div>
 </div>
