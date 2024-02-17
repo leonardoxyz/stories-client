@@ -15,6 +15,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     CardModule,
     DividerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DialogModule,
+    InputTextModule
     
   ],
   providers: [],

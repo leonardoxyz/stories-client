@@ -20,5 +20,9 @@ export class StoryService {
   delete(id: string): Observable<boolean> {
     return this.http.delete<boolean>(`${this.apiUrl}/${id}`);
   }
+
+  put(story: Story): Observable<Story> {
+    return this.http.put<Story>(`${this.apiUrl}/${story.id}`, story);
+  }
 }
 
