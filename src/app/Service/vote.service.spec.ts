@@ -26,6 +26,8 @@ describe('VoteService', () => {
       id: uuidv4(),
       StoryId: uuidv4(),
       isLiked: true,
+      userId: 'user123',
+      UserName: 'John Doe'
     };
 
     voteService.addVote(mockData).subscribe(response => {

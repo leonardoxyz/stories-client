@@ -1,3 +1,5 @@
+import { Vote } from "./Vote"
+
 export class Story {
     id!: string
     title!: string
@@ -5,5 +7,6 @@ export class Story {
     likes!: number
     dislikes!: number
     departmentId!: string
+    Votes!: Vote[];
 }
 

@@ -308,7 +308,7 @@ h1 {
 }
 
 .dialog-container {
-  min-height: 450px;
+  min-height: 700px;
   display: flex;
   align-items: center;
   justify-content: center;

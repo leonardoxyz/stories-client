@@ -25,24 +25,23 @@
               <button pButton class="pi pi-thumbs-down p-button-danger" (click)="vote(story.id ?? '', false)"></button>
               <button pButton pRipple class="pi pi-pencil" (click)="showDialog()">
                 <div class="card flex justify-content-center">
-                  <p-dialog icon="pi pi-external-link" [(visible)]="visible" [modal]="true"
-                    [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+                  <p-dialog icon="pi pi-external-link" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
+                    [draggable]="false" [resizable]="false">
                     <div class="dialog-container">
                       <div class="dialog-title">
                         <h1>Editando a Estória -</h1> <span>{{story.title}}</span>
                       </div>
                       <div class="dialog-context">
                         <p>Título: </p>
-                        <input type="text" pInputText placeholder="Título da Estória" [(ngModel)]="title" required />
+                        <input type="text" pInputText placeholder="Título da Estória" [(ngModel)]="story.title" required />
 
                         <p>Descrição: </p>
-                        <input type="text" pInputText placeholder="Descrição da Estória" [(ngModel)]="description"
+                        <input type="text" pInputText placeholder="Descrição da Estória" [(ngModel)]="story.description"
                           required />
 
                         <p>Departamento: </p>
-                        <p-dropdown [options]="departments" [(ngModel)]="selectedDepartment"
+                        <p-dropdown [options]="departments" [(ngModel)]="selectedDepartment" 
                           placeholder="Selecione um Departamento" optionLabel="name"></p-dropdown>
-
                         <button pButton pRipple class="p-button-success" (click)="putStory(story)">Salvar</button>
                       </div>
                     </div>

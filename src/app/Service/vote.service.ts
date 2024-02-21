@@ -17,4 +17,8 @@ export class VoteService {
   addVote(vote: Vote): Observable<boolean> {
     return this.http.post<boolean>(`${this.apiUrl}`, vote);
   }
+  
+  getVotesByStoryId(storyId: string): Observable<Vote[]> {
+    return this.http.get<Vote[]>(`${env.apiUrl}/Stories/Votes/${storyId}`);
+  }  
 }

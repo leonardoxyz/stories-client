@@ -25,4 +25,3 @@ export class StoryService {
     return this.http.put<Story>(`${this.apiUrl}/${story.id}`, story);
   }
 }
-

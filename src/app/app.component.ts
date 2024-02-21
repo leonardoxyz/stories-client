@@ -9,6 +9,7 @@ import { Option } from './Model/Option';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { VoteService } from './Service/vote.service';
+import { Vote } from './Model/Vote';
 
 @Component({
   selector: 'app-root',
@@ -26,8 +27,7 @@ export class AppComponent implements OnInit {
   newStory: Story | undefined;
   visible: boolean = false;
 
-  public title: string = '';
-  public description: string = '';
+  votes: Vote[] | undefined;
 
   public stories: Story[] = [];
   public error: string | null = null;
@@ -60,7 +60,27 @@ export class AppComponent implements OnInit {
     );
   }
 
-  
+  putStory(selectedStory: Story) {
+    console.log(selectedStory);
+    this.storyService.put(selectedStory).subscribe({
+      next: (story: Story) => {
+        console.log('História atualizada com sucesso:', story);
+        this.storyService.get().subscribe(
+          (stories: Story[]) => {
+            this.stories = stories;
+            this.visible = false;
+          },
+          (error) => {
+            console.error('Erro ao buscar histórias:', error);
+          }
+        );
+      },
+      error: (error) => {
+        console.error('Erro ao atualizar história:', error);
+      }
+    });
+  }
+
   showDialog() {
     this.visible = true;
   }
@@ -120,36 +140,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  putStory(selectedStory: Story) {
-    if (!selectedStory) {
-      console.error('Nenhuma história selecionada.');
-      return;
-    }
-
-    selectedStory.title = this.title;
-    selectedStory.description = this.description;
-    if (this.selectedDepartment) {
-      selectedStory.departmentId = this.selectedDepartment.id;
-    }
-  
-    this.storyService.put(selectedStory).subscribe({
-      next: (story: Story) => {
-        console.log('História atualizada com sucesso:', story);
-        this.storyService.get().subscribe(
-          (stories: Story[]) => {
-            this.stories = stories;
-            this.visible = false;
-          },
-          (error) => {
-            console.error('Erro ao buscar histórias:', error);
-          }
-        );
-      },
-      error: (error) => {
-        console.error('Erro ao atualizar história:', error);
-      }
-    });
-  }
 
   vote(storyId: string, isLiked: boolean) {
     if (!this.selectedUser) {
@@ -167,7 +157,9 @@ export class AppComponent implements OnInit {
 
     const vote = {
       id: userId,
+      userId: userId,
       isLiked: isLiked,
+      Name: this.selectedUser.name,
       StoryId: storyId,
       story: story
     };
@@ -176,12 +168,24 @@ export class AppComponent implements OnInit {
       next: (success) => {
         if (success) {
           console.log('Voto registrado com sucesso.');
+          console.log('ID do Usuário: ', userId);
+
           this.storyService.get().subscribe(
             (stories: Story[]) => {
               this.stories = stories;
             },
             (error) => {
               console.error('Erro ao buscar estórias', error);
+            }
+          );
+
+          this.voteService.getVotesByStoryId(storyId).subscribe(
+            (votes: Vote[]) => {
+              console.log('Votos para a história:', votes);
+              story.Votes = votes;
+            },
+            (error) => {
+              console.error('Erro ao buscar votos:', error);
             }
           );
         } else {
@@ -194,5 +198,3 @@ export class AppComponent implements OnInit {
     });
   }
 }
-
-
