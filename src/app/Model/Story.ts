@@ -6,4 +6,3 @@ export class Story {
     dislikes!: number
     departmentId!: string
 }
-

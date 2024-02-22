@@ -18,7 +18,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,11 +34,11 @@ import { InputTextModule } from 'primeng/inputtext';
     DividerModule,
     ReactiveFormsModule,
     DialogModule,
-    InputTextModule
-    
+    InputTextModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule  {
+export class AppModule {
 }

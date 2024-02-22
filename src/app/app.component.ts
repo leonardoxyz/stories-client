@@ -9,6 +9,7 @@ import { Option } from './Model/Option';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { VoteService } from './Service/vote.service';
+import { Vote } from './Model/Vote';
 
 @Component({
   selector: 'app-root',
@@ -22,15 +23,14 @@ export class AppComponent implements OnInit {
   selectedDepartment: Department | undefined;
   selectedOption: Option | undefined;
   departments: Department[] | undefined;
-  selectedStory: Story | undefined;
-  newStory: Story | undefined;
   visible: boolean = false;
-
-  public title: string = '';
-  public description: string = '';
+  votes: Vote[] | undefined;
+  selectedStory: Story | null = null;
 
   public stories: Story[] = [];
   public error: string | null = null;
+
+  usersWhoVoted: User[] = [];
 
   constructor(private voteService: VoteService, private formBuilder: FormBuilder, private httpClient: HttpClient, private userService: UserService, private storyService: StoryService, private departmentService: DepartmentService) { }
 
@@ -60,9 +60,34 @@ export class AppComponent implements OnInit {
     );
   }
 
-  
-  showDialog() {
-    this.visible = true;
+  putStory() {
+    if (this.selectedStory) {
+      this.selectedStory.departmentId = this.selectedDepartment?.id || '';
+      this.storyService.put(this.selectedStory).subscribe(
+        (updatedStory: Story) => {
+          const index = this.stories.findIndex(s => s.id === updatedStory.id);
+          if (index !== -1) {
+            this.stories[index] = updatedStory;
+          }
+          this.visible = false;
+          this.getStories();
+        },
+        (error) => {
+          console.error('Erro ao editar a história:', error);
+        }
+      );
+    }
+  }
+
+  private getStories() {
+    this.storyService.get().subscribe(
+      (stories: Story[]) => {
+        this.stories = stories;
+      },
+      (error) => {
+        console.error('Erro ao buscar estórias', error);
+      }
+    );
   }
 
   sortStories() {
@@ -120,37 +145,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  putStory(selectedStory: Story) {
-    if (!selectedStory) {
-      console.error('Nenhuma história selecionada.');
-      return;
-    }
-
-    selectedStory.title = this.title;
-    selectedStory.description = this.description;
-    if (this.selectedDepartment) {
-      selectedStory.departmentId = this.selectedDepartment.id;
-    }
-  
-    this.storyService.put(selectedStory).subscribe({
-      next: (story: Story) => {
-        console.log('História atualizada com sucesso:', story);
-        this.storyService.get().subscribe(
-          (stories: Story[]) => {
-            this.stories = stories;
-            this.visible = false;
-          },
-          (error) => {
-            console.error('Erro ao buscar histórias:', error);
-          }
-        );
-      },
-      error: (error) => {
-        console.error('Erro ao atualizar história:', error);
-      }
-    });
-  }
-
   vote(storyId: string, isLiked: boolean) {
     if (!this.selectedUser) {
       console.error('Nenhum usuário selecionado.');
@@ -167,7 +161,9 @@ export class AppComponent implements OnInit {
 
     const vote = {
       id: userId,
+      userId: userId,
       isLiked: isLiked,
+      Name: this.selectedUser.name,
       StoryId: storyId,
       story: story
     };
@@ -176,6 +172,8 @@ export class AppComponent implements OnInit {
       next: (success) => {
         if (success) {
           console.log('Voto registrado com sucesso.');
+          console.log('ID do Usuário: ', userId);
+
           this.storyService.get().subscribe(
             (stories: Story[]) => {
               this.stories = stories;
@@ -193,6 +191,20 @@ export class AppComponent implements OnInit {
       }
     });
   }
+
+  openEditDialog(story: Story) {
+    this.selectedStory = { ...story };
+
+    if (this.selectedStory && this.departments) {
+      this.selectedDepartment = this.departments.find(d => d.id === this.selectedStory?.departmentId);
+    }
+
+    this.visible = true;
+  }
+
+
+  closeEditDialog() {
+    this.selectedStory = null;
+    this.visible = false;
+  }
 }
-
-

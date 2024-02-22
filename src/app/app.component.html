@@ -4,14 +4,17 @@
       <h1>Vote nas Estórias.</h1>
       <span>Lembre-se de selecionar um usuário!</span>
     </div>
+
     <div class="app-context">
       <p-dropdown [options]="users" [(ngModel)]="selectedUser" placeholder="Selecione um Usuário"
         optionLabel="name"></p-dropdown>
       <p-dropdown [options]="options" [(ngModel)]="selectedOption" placeholder="Organizar por" optionLabel="name"
         (onChange)="sortStories()"></p-dropdown>
     </div>
+
     <div class="story-container">
       <div *ngFor="let story of stories" class="card flex justify-content-center">
+
         <p-card [header]="story.title" [style]="{ width: '300px' }">
           <ng-template pTemplate="header"></ng-template>
           <p>{{ story.description }}</p>
@@ -19,36 +22,41 @@
           <p>Dislike - {{ story.dislikes }}</p>
           <p>Departamento - {{ getDepartmentName(story.departmentId) }}</p>
           <ng-template pTemplate="footer">
+
             <div class="app-cta">
-              <button pButton pRipple class="pi pi-thumbs-up p-button-success" (click)="vote(story.id ?? '', true)">
-              </button>
+              <button pButton pRipple class="pi pi-thumbs-up p-button-success"
+                (click)="vote(story.id ?? '', true)"></button>
               <button pButton class="pi pi-thumbs-down p-button-danger" (click)="vote(story.id ?? '', false)"></button>
-              <button pButton pRipple class="pi pi-pencil" (click)="showDialog()">
-                <div class="card flex justify-content-center">
-                  <p-dialog icon="pi pi-external-link" [(visible)]="visible" [modal]="true"
-                    [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                    <div class="dialog-container">
-                      <div class="dialog-title">
-                        <h1>Editando a Estória -</h1> <span>{{story.title}}</span>
-                      </div>
-                      <div class="dialog-context">
-                        <p>Título: </p>
-                        <input type="text" pInputText placeholder="Título da Estória" [(ngModel)]="title" required />
 
-                        <p>Descrição: </p>
-                        <input type="text" pInputText placeholder="Descrição da Estória" [(ngModel)]="description"
-                          required />
-
-                        <p>Departamento: </p>
-                        <p-dropdown [options]="departments" [(ngModel)]="selectedDepartment"
-                          placeholder="Selecione um Departamento" optionLabel="name"></p-dropdown>
-
-                        <button pButton pRipple class="p-button-success" (click)="putStory(story)">Salvar</button>
-                      </div>
-                    </div>
-                  </p-dialog>
-                </div>
+              <button pButton pRipple class="pi pi-pencil" (click)="openEditDialog(story)">
               </button>
+
+              <p-dialog icon="pi pi-external-link" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }"
+                [draggable]="false" [resizable]="false" (onHide)="closeEditDialog()">
+                <div class="dialog-container">
+                  <div class="dialog-title">
+                    <h1>Editando a Estória -</h1> <span>{{selectedStory?.title}}</span>
+                  </div>
+                  <div class="dialog-context">
+                    <p>Título: </p>
+                    <input type="text" pInputText placeholder="Título da Estória" [ngModel]="selectedStory?.title"
+                      (ngModelChange)="selectedStory && (selectedStory.title = $event)" required />
+
+                    <p>Descrição: </p>
+                    <input type="text" pInputText placeholder="Descrição da Estória"
+                      [ngModel]="selectedStory?.description"
+                      (ngModelChange)="selectedStory && (selectedStory.description = $event)" required />
+
+
+                    <p>Departamento: </p>
+                    <p-dropdown [options]="departments" [(ngModel)]="selectedDepartment"
+                      placeholder="Selecione um Departamento" optionLabel="name"></p-dropdown>
+
+                    <button pButton label="Salvar" (click)="putStory()"></button>
+                  </div>
+                </div>
+              </p-dialog>
+
               <button (click)="deleteStory(story.id)" class="deleteButton">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 50 59" class="bin">
                   <path fill="#B5BAC1"
@@ -63,6 +71,7 @@
                 </svg>
                 <span class="tooltip">Delete</span>
               </button>
+
             </div>
           </ng-template>
         </p-card>
