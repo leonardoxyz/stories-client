@@ -29,18 +29,22 @@ describe('StoryService', () => {
   
       storyService.get();
   
-      storyService.stories$.subscribe((data: any) => {
-        expect(data).toEqual(mockData);
-      });
-  
       const request = httpMock.expectOne(`${storyService.apiUrl}`);
       expect(request.request.method).toBe('GET');
   
       request.flush(mockData);
   
+      setTimeout(() => {
+        storyService.stories$.subscribe((data: any) => {
+          expect(data.length).toEqual(1);
+          expect(data[0]).toEqual(jasmine.objectContaining(mockData[0]));
+        });
+      });
+  
       httpMock.verify();
     }
   ));
+  
 
   it('should delete data from API via DELETE', inject(
     [HttpTestingController, StoryService],

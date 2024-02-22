@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { VoteService } from './Service/vote.service';
 import { Vote } from './Model/Vote';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit {
   newStory: Story = new Story();
   addStoryVisible: boolean = false;
 
-  constructor(private voteService: VoteService, private formBuilder: FormBuilder, private httpClient: HttpClient, private userService: UserService, private storyService: StoryService, private departmentService: DepartmentService) { }
+  constructor(private messageService: MessageService, private voteService: VoteService, private formBuilder: FormBuilder, private httpClient: HttpClient, private userService: UserService, private storyService: StoryService, private departmentService: DepartmentService) { }
 
   ngOnInit() {
     this.getDepartments();
@@ -68,6 +69,7 @@ export class AppComponent implements OnInit {
     this.storyService.add(story).subscribe(
       (newStory: Story) => {
         this.stories.push(newStory);
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'História adicionada com sucesso!' });
         this.addStoryVisible = false;
         this.storyService.get()
       },
@@ -137,6 +139,7 @@ export class AppComponent implements OnInit {
       next: (success) => {
         if (success) {
           console.log('História deletada com sucesso.');
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'História deletada com sucesso!' });
           this.storyService.get()
         } else {
           console.error('Erro ao deletar história.');
@@ -151,6 +154,7 @@ export class AppComponent implements OnInit {
   vote(storyId: string, isLiked: boolean) {
     if (!this.selectedUser) {
       console.error('Nenhum usuário selecionado.');
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Nenhum usuário selecionado.' });
       return;
     }
 
@@ -159,6 +163,7 @@ export class AppComponent implements OnInit {
 
     if (!story) {
       console.error('História não encontrada.');
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'História não encontrada.' });
       return;
     }
 
@@ -174,6 +179,7 @@ export class AppComponent implements OnInit {
     this.voteService.addVote(vote).subscribe({
       next: (success) => {
         if (success) {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Voto registrado com sucesso!' })
           console.log('Voto registrado com sucesso.');
           console.log('ID do Usuário: ', userId);
 
@@ -184,6 +190,7 @@ export class AppComponent implements OnInit {
       },
       error: (error) => {
         console.error('Erro ao votar:', error);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao votar.' });
       }
     });
   }

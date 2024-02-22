@@ -40,8 +40,9 @@
       </div>
 
 
-    </div>
+      <p-toast></p-toast>
 
+    </div>
     <div class="story-container">
       <div *ngFor="let story of stories" class="card flex justify-content-center">
 
@@ -79,7 +80,7 @@
 
                     <p>Departamento: </p>
                     <p-dropdown [options]="departments" [(ngModel)]="selectedDepartment"
-                      placeholder="Selecione um Departamento" optionLabel="name"></p-dropdown>
+                      placeholder="Selecione um Departamento" optionLabel="name" class="dropdown"></p-dropdown>
 
                     <button pButton label="Salvar" (click)="putStory()"></button>
                   </div>

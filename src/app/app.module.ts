@@ -17,6 +17,10 @@ import { DividerModule } from 'primeng/divider';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -35,9 +39,12 @@ import { InputTextModule } from 'primeng/inputtext';
     ReactiveFormsModule,
     DialogModule,
     InputTextModule,
+    ConfirmDialogModule,
+    ConfirmPopupModule,
+    ToastModule
 
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
