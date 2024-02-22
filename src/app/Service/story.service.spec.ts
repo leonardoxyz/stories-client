@@ -3,6 +3,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import { StoryService } from './story.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { v4 as uuidv4 } from 'uuid';
+import { first } from 'rxjs';
 
 describe('StoryService', () => {
   beforeEach(() => {
@@ -11,7 +12,7 @@ describe('StoryService', () => {
       imports: [HttpClientTestingModule]
     });
   });
-  
+
   it('should retrieve data from the API via GET', inject(
     [HttpTestingController, StoryService],
     (httpMock: HttpTestingController, storyService: StoryService) => {
@@ -25,15 +26,18 @@ describe('StoryService', () => {
           departmentId: uuidv4()
         }
       ];
-
-      storyService.get().subscribe(data => {
+  
+      storyService.get();
+  
+      storyService.stories$.subscribe((data: any) => {
         expect(data).toEqual(mockData);
       });
-
+  
       const request = httpMock.expectOne(`${storyService.apiUrl}`);
       expect(request.request.method).toBe('GET');
-
+  
       request.flush(mockData);
+  
       httpMock.verify();
     }
   ));

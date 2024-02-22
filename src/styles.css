@@ -286,18 +286,17 @@ h1 {
   justify-content: center;
 }
 
-.dialog-context {
-  display: flex;
-  flex-direction: column;
-  row-gap: 1rem;
-}
-
 .dialog-context p {
   display: flex;
   justify-content: start;
   margin: 0;
   padding: 0;
+}
 
+.dialog-context {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
 }
 
 .p-button-success {
@@ -308,7 +307,7 @@ h1 {
 }
 
 .dialog-container {
-  min-height: 450px;
+  min-height: 600px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -325,4 +324,16 @@ h1 {
 .dialog-title span {
   font-size: 24px;
   color: blue;
+}
+
+.add-cta {
+  display: flex;
+  gap: 1rem;
+}
+
+.story-add {
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
 }

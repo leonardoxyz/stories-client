@@ -10,6 +10,36 @@
         optionLabel="name"></p-dropdown>
       <p-dropdown [options]="options" [(ngModel)]="selectedOption" placeholder="Organizar por" optionLabel="name"
         (onChange)="sortStories()"></p-dropdown>
+
+      <button pButton pRipple class="pi pi-plus" (click)="openAddStoryDialog()"></button>
+
+      <div *ngIf="addStoryVisible">
+        <p-dialog header="Adicionar Nova História" [(visible)]="addStoryVisible" [modal]="true"
+          [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" (onHide)="closeAddStoryDialog()">
+          <div class="story-add p-grid p-fluid">
+            <div class="p-col-12">
+              <label for="title">Título:</label>
+              <input type="text" pInputText id="title" [(ngModel)]="newStory.title" />
+            </div>
+            <div class="p-col-12">
+              <label for="description">Descrição:</label>
+              <input type="text" pInputText id="description" [(ngModel)]="newStory.description" />
+            </div>
+            <div class="p-col-12">
+              <label for="department">Departamento:</label>
+              <p-dropdown [options]="departments" [(ngModel)]="selectedDepartment"
+                (ngModelChange)="newStory.departmentId = $event.id" placeholder="Selecione um Departamento"
+                optionLabel="name"></p-dropdown>
+            </div>
+          </div>
+          <div class="add-cta">
+            <button pButton label="Cancelar" (click)="closeAddStoryDialog()"></button>
+            <button pButton label="Adicionar" (click)="submitNewStory(newStory)"></button>
+          </div>
+        </p-dialog>
+      </div>
+
+
     </div>
 
     <div class="story-container">
@@ -24,9 +54,8 @@
           <ng-template pTemplate="footer">
 
             <div class="app-cta">
-              <button pButton pRipple class="pi pi-thumbs-up p-button-success"
-                (click)="vote(story.id ?? '', true)"></button>
-              <button pButton class="pi pi-thumbs-down p-button-danger" (click)="vote(story.id ?? '', false)"></button>
+              <button pButton pRipple class="pi pi-thumbs-up p-button-success" (click)="vote(story.id, true)"></button>
+              <button pButton class="pi pi-thumbs-down p-button-danger" (click)="vote(story.id, false)"></button>
 
               <button pButton pRipple class="pi pi-pencil" (click)="openEditDialog(story)">
               </button>

@@ -30,12 +30,14 @@ export class AppComponent implements OnInit {
   public stories: Story[] = [];
   public error: string | null = null;
 
-  usersWhoVoted: User[] = [];
+  newStory: Story = new Story();
+  addStoryVisible: boolean = false;
 
   constructor(private voteService: VoteService, private formBuilder: FormBuilder, private httpClient: HttpClient, private userService: UserService, private storyService: StoryService, private departmentService: DepartmentService) { }
 
   ngOnInit() {
     this.getDepartments();
+    this.storyService.stories$.subscribe(stories => this.stories = stories);
     this.userService.get().subscribe(
       (users: User[]) => {
         this.users = users;
@@ -50,12 +52,27 @@ export class AppComponent implements OnInit {
       { name: 'Dislikes', sortBy: 'dislikes' }
     ];
 
-    this.storyService.get().subscribe(
-      (stories: Story[]) => {
-        this.stories = stories;
+    this.storyService.get()
+  }
+
+  openAddStoryDialog() {
+    this.newStory = new Story();
+    this.addStoryVisible = true;
+  }
+
+  closeAddStoryDialog() {
+    this.addStoryVisible = false;
+  }
+
+  submitNewStory(story: Story) {
+    this.storyService.add(story).subscribe(
+      (newStory: Story) => {
+        this.stories.push(newStory);
+        this.addStoryVisible = false;
+        this.storyService.get()
       },
       (error) => {
-        console.error('Erro ao buscar estórias', error);
+        console.error('Erro ao adicionar a história:', error);
       }
     );
   }
@@ -80,14 +97,7 @@ export class AppComponent implements OnInit {
   }
 
   private getStories() {
-    this.storyService.get().subscribe(
-      (stories: Story[]) => {
-        this.stories = stories;
-      },
-      (error) => {
-        console.error('Erro ao buscar estórias', error);
-      }
-    );
+    this.storyService.get()
   }
 
   sortStories() {
@@ -127,14 +137,7 @@ export class AppComponent implements OnInit {
       next: (success) => {
         if (success) {
           console.log('História deletada com sucesso.');
-          this.storyService.get().subscribe(
-            (stories: Story[]) => {
-              this.stories = stories;
-            },
-            (error) => {
-              console.error('Erro ao buscar histórias:', error);
-            }
-          );
+          this.storyService.get()
         } else {
           console.error('Erro ao deletar história.');
         }
@@ -174,14 +177,7 @@ export class AppComponent implements OnInit {
           console.log('Voto registrado com sucesso.');
           console.log('ID do Usuário: ', userId);
 
-          this.storyService.get().subscribe(
-            (stories: Story[]) => {
-              this.stories = stories;
-            },
-            (error) => {
-              console.error('Erro ao buscar estórias', error);
-            }
-          );
+          this.storyService.get()
         } else {
           console.error('Este usuário já votou nesta história.');
         }
@@ -201,7 +197,6 @@ export class AppComponent implements OnInit {
 
     this.visible = true;
   }
-
 
   closeEditDialog() {
     this.selectedStory = null;
