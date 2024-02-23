@@ -39,9 +39,11 @@
         </p-dialog>
       </div>
 
-
       <p-toast></p-toast>
 
+    </div>
+    <div *ngIf="stories.length === 0" class="no-story">
+      <h1>Nenhuma estória cadastrada.</h1>
     </div>
     <div class="story-container">
       <div *ngFor="let story of stories" class="card flex justify-content-center">
